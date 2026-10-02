@@ -17,6 +17,7 @@ def test_url_normalization():
 
 def test_source_classification():
     assert classify_source("https://tribal.nic.in/x") == "GOVERNMENT"
+    assert classify_source("https://scholarships.gov.in/All-Scholarships") == "SCHOLARSHIP_PORTAL"
     assert classify_source("https://example.com") == "OTHER"
 
 def test_confidence_requires_supported_evidence():
@@ -86,3 +87,32 @@ def test_change_detection_persists_old_new_evidence():
         event=session.query(ChangeEvent).one()
         assert (event.old_value,event.new_value,event.evidence)==("₹10,000","₹12,000","Official page states ₹12,000")
     Base.metadata.drop_all(engine)
+
+def test_demonstration_change_is_marked_and_does_not_mutate_record():
+    engine=create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    Session=sessionmaker(bind=engine)
+    with Session() as session:
+        item=Scholarship(name="Evidence test",official_source_url="https://example.gov.in/x",amount="₹10,000")
+        session.add(item);session.commit()
+        assert detect_changes(session,item,{"amount":"DEMO ONLY: ₹12,000"},item.official_source_url,
+            "DEMONSTRATION ONLY: synthetic test; not source evidence",is_demonstration=True,
+            scenario_id="test-scenario") == 1
+        session.commit()
+        event=session.query(ChangeEvent).one()
+        assert item.amount == "₹10,000"
+        assert (event.old_value,event.new_value,event.is_demonstration,event.scenario_id) == (
+            "₹10,000","DEMO ONLY: ₹12,000",True,"test-scenario")
+    Base.metadata.drop_all(engine)
+
+def test_scholarship_api_confidence_filter_and_pagination():
+    response=TestClient(app).get("/scholarships",params={"min_confidence":95,"page":1,"page_size":3})
+    assert response.status_code==200
+    data=response.json()
+    assert data["page_size"]==3
+    assert all(x["confidence_score"]>=95 for x in data["items"])
+
+def test_stats_exposes_assignment_metrics():
+    response=TestClient(app).get("/stats")
+    assert response.status_code==200
+    assert {"expiring_soon","no_longer_verifiable","recently_updated_30d"} <= response.json().keys()

@@ -13,3 +13,19 @@ services:
         value: sqlite:///data/scholarships.db
       - key: CRAWLER_USER_AGENT
         value: ScholarshipIntelligenceBot/1.0 (hosted demo)
+  - type: web
+    name: scholarship-intelligence-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DATABASE_URL
+        value: sqlite:///data/scholarships.db
+      - key: CRAWLER_USER_AGENT
+        value: ScholarshipIntelligenceBot/1.0 (hosted demo)
+      - key: CRAWL_API_TOKEN
+        generateValue: true

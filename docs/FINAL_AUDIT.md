@@ -1,41 +1,36 @@
 # Final audit
 
-Audit date: 2 October 2026. Counts below come from the persisted SQLite database after reprocessing saved official PDF snapshots and reviewing extracted fields for cross-scheme and outdated-cycle contamination.
+Audit date: 2 October 2026. Counts are from `data/scholarships.db`, including the post-classification update and explicitly marked QA history events. Run `python scripts/verify_dataset.py` to recompute the dataset gates.
 
 ## Dataset gates
 
-| Measure | Result | Requirement | Status |
+| Measure | Result | Requirement | Result |
 |---|---:|---:|---|
-| Distinct crawled scholarship records | 55 | ≥20 real records | PASS |
-| Source types represented | 3 (government, university, corporate CSR) | ≥3 | PASS |
-| Source mix | 26 government, 28 university, 1 corporate CSR | — | Measured |
-| VERIFIED at confidence ≥95 | 9 | ≥15 | FAIL |
-| Confidence ≥95 | 9 | ≥10 | FAIL |
-| Source-backed change events | 0 | ≥2 | FAIL |
-| Expired/no-longer-verifiable examples | 2 | ≥2 | PASS |
+| Distinct records | 55 | ≥20 real records | PASS |
+| Source types | 3: Scholarship Portal, University, Corporate CSR | ≥3 | PASS |
+| Source mix | 26 Scholarship Portal, 28 University, 1 Corporate CSR | — | Measured |
+| Primary-source verified, confidence ≥95 | 9 | ≥15 | **FAIL** |
+| Confidence ≥95 | 9 | ≥10 | **FAIL** |
+| Genuine source-backed change events | 0 | ≥2 examples | **FAIL** |
+| Demonstration-only change events | 2 | Not counted as genuine | QA illustration only |
+| Expired/stale examples | 2 | ≥2 | PASS |
 
-The 9 VERIFIED rows consist of six current AICTE schemes, UGC Post Graduate Studies, Ishan Uday, and PM-USP CSSS. The Railway PMSS row is deliberately review-required because its linked guideline limits eligibility to 2022–23. Shared disability-scheme PDFs do not contribute a scalar amount because their rates vary by category. No scholarship records or source-backed changes were fabricated. The `simulate_change.py` helper is a QA demonstration only and is not included in the source-backed change count.
+The 9 verified rows are six current AICTE schemes, UGC Post Graduate Studies, Ishan Uday and PM-USP CSSS. Ambiguous, shared-scheme and outdated-cycle evidence remains review-required. The Railway PMSS row is not counted as verified because the linked guideline only supports a 2022–23 eligibility cycle. No award amount, deadline or scholarship record was invented to meet a numeric target.
 
-## Implementation audit
+## Implementation and submission readiness
 
-| Requirement | Status | Evidence | Test/validation |
-|---|---|---|---|
-| Discovery → crawl → extract → verify → score → store → update | Implemented | `app/crawler/`, `app/services/crawler.py` | Live crawl persisted 55 records |
-| ≥20 real records | PASS | 55 source-linked rows in `data/scholarships.db` | `python scripts/verify_dataset.py` |
-| ≥15 officially verified; ≥10 at ≥95 | FAIL | 9 meet strict confidence and evidence criteria | `python scripts/verify_dataset.py` |
-| ≥3 source types | PASS | Government, university, corporate CSR | Dataset audit |
-| ≥2 source-backed change examples | FAIL | No field change was observed across repeat crawls; QA simulation is labeled and excluded | Change-history table; dataset audit |
-| ≥2 expired/stale examples | PASS | 1 expired CSSS listing and 1 no-current-cycle corporate source | Dataset audit |
-| Source, application URL, evidence and retrieval metadata | Implemented | Evidence and snapshot tables retain excerpts, hashes and source URLs | API smoke check |
-| Anti-hallucination safeguards | Implemented with limits | Unsupported values remain null; questionable PDF fields were removed | Extractor and confidence tests; manual row audit |
-| Repeatable crawling, robots, rate limit and per-page failure handling | Implemented | Bounded crawler modules | Crawl run and tests |
-| Searchable dashboard with evidence/history | Implemented | `dashboard/app.py` | Dashboard launched locally |
-| FastAPI endpoints | Implemented | `app/main.py` | `/health`, `/stats`, `/scholarships`: HTTP 200 |
-| Test suite | PASS | 11 tests passed | `.venv/bin/pytest -q` |
-| Python compilation | PASS | `compileall` completed | `python -m compileall` |
-| GitHub repository | PASS | Private repo: `nishantdubey-tech/scholarship-intelligence` | Initial commit `5bcff51` |
-| Hosted dashboard | PASS with free-tier limits | https://scholarship-intelligence.onrender.com; healthy and 55-record page verified | Render build successful; live page loaded |
-| Hosted API | NOT DEPLOYED | Render Blueprint deploys Streamlit dashboard only | API available locally |
-| Hosted data persistence | LIMITED | Free Render filesystem is ephemeral; crawler updates do not persist after restart | Render free service configuration |
+| Requirement | Current evidence | Status |
+|---|---|---|
+| Discovery, crawl, extraction, verification, scoring, storage and updates | `app/crawler/`, `app/services/`, `app/verification/`, database and history | Implemented; tests pass |
+| Dataset thresholds | Dataset validation output above | 20+ records, three types and two stale examples pass; verified/high-confidence thresholds fail |
+| Change examples | Two marked QA events; zero source-observed events | Partial; demonstrate simulation as simulation only |
+| Evidence and API | Source URLs, excerpts, hashes, snapshot/history routes | Implemented |
+| Dashboard | Metrics, expanded filters, detail fields, evidence and labelled history | Implemented |
+| Automated tests | `.venv/bin/pytest -q` | 14 passed |
+| Syntax compilation | `PYTHONPYCACHEPREFIX=/tmp/si-pycache .venv/bin/python -m compileall -q app dashboard scripts tests` | PASS |
+| GitHub | [Private repository](https://github.com/nishantdubey-tech/scholarship-intelligence) | Existing; updates pushed after review |
+| Hosted dashboard | [scholarship-intelligence.onrender.com](https://scholarship-intelligence.onrender.com) | Existing Render free service |
+| Hosted API | Added as second service in `render.yaml` with generated crawl token | Blueprint sync/deployment must be confirmed in Render |
+| Persistence | Bundled SQLite on free service | Ephemeral; dashboard/API each hold independent snapshots |
 
-The dataset gate exits non-zero as required. It passes 20+ records, three source types and two stale/expired examples, and fails the verified-count, high-confidence-count and source-backed-change-count gates. Do not describe this project as submission-ready until those three data gates are met.
+This submission is not a pass on every assignment acceptance criterion. The validator should remain non-zero until primary-source evidence supports the missing verified records, confidence threshold, and genuine changed source fields. The two demonstration events exist to make change-history behavior reviewable; they cannot satisfy a genuine-change requirement if the evaluator requires observed changes.

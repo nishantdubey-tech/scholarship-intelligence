@@ -2,7 +2,7 @@
 from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Optional
-from sqlalchemy import String, Text, Float, DateTime, ForeignKey, JSON, Integer
+from sqlalchemy import String, Text, Float, DateTime, ForeignKey, JSON, Integer, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.db import Base
 
@@ -55,6 +55,8 @@ class ChangeEvent(Base):
     detected_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc)
     source_url: Mapped[str] = mapped_column(Text)
     evidence: Mapped[str] = mapped_column(Text)
+    is_demonstration: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False, index=True)
+    scenario_id: Mapped[Optional[str]] = mapped_column(String(100), nullable=True, index=True)
     scholarship: Mapped[Scholarship] = relationship(back_populates="history")
 
 class CrawlRun(Base):
