@@ -28,7 +28,8 @@ with SessionLocal() as session:
             fields["current_status"]="REVIEW_REQUIRED"
             item.current_status="REVIEW_REQUIRED"
         updated=False
-        pdf_fields={"amount","eligibility","benefit_description","selection_process","renewal_requirements"}
+        pdf_fields={"amount","eligibility","benefit_description","selection_process","renewal_requirements",
+                    "income_criteria","academic_requirements","documents_required","education_level"}
         session.query(Evidence).filter(Evidence.scholarship_id==item.id,
             Evidence.source_url==item.official_source_url,Evidence.field_name.in_(pdf_fields)).delete(synchronize_session=False)
         for field in pdf_fields:
@@ -39,6 +40,9 @@ with SessionLocal() as session:
                 updated=True
             elif value:
                 fields[field]=value
+                if hasattr(item, field):
+                    setattr(item, field, value)
+                updated=True
             else:
                 fields.pop(field,None)
             evidence_text=details["field_evidence"].get(field)

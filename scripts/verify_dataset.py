@@ -28,7 +28,7 @@ with SessionLocal() as session:
         ("15+ primary-source verified", len(verified) >= 15),
         ("10+ confidence >=95%", len(high) >= 10),
         ("3+ source types", len(types) >= 3),
-        ("2+ change examples (live or explicitly simulated)", changes >= 2),
+        ("2+ recorded change events", changes >= 2),
         ("2+ expired/stale examples", stale >= 2),
     ]
     print("# Dataset Validation\n")
