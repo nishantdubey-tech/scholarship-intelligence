@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: scholarship-intelligence
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run dashboard/app.py --server.address 0.0.0.0 --server.port $PORT
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DATABASE_URL
+        value: sqlite:///data/scholarships.db
+      - key: CRAWLER_USER_AGENT
+        value: ScholarshipIntelligenceBot/1.0 (hosted demo)
