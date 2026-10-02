@@ -61,6 +61,12 @@ def test_health_endpoint():
     response=TestClient(app).get("/health")
     assert response.status_code==200 and response.json()=={"status":"ok"}
 
+def test_root_index_returns_html_ui():
+    response=TestClient(app).get("/")
+    assert response.status_code==200
+    assert "text/html" in response.headers.get("content-type","")
+    assert "Scholarship Intelligence" in response.text
+
 def test_expired_date_status_is_derived():
     class Item:
         closing_date="01 January 2020"

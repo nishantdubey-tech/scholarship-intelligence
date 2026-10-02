@@ -6,10 +6,12 @@ from datetime import datetime, timedelta, timezone
 import hmac
 import os
 from fastapi import FastAPI, HTTPException, Query, Header
+from fastapi.responses import HTMLResponse
 from sqlalchemy import or_, func
 from app.database.db import initialize, SessionLocal
 from app.models.scholarship import Scholarship, CrawlRun, SourceSnapshot
 from app.services.crawler import run_crawl
+from app.ui import get_ui_html
 
 @asynccontextmanager
 async def lifespan(_app):
@@ -17,6 +19,10 @@ async def lifespan(_app):
     yield
 
 app = FastAPI(title="Scholarship Intelligence", version="1.0.0", lifespan=lifespan)
+
+@app.get("/", response_class=HTMLResponse)
+def index():
+    return HTMLResponse(get_ui_html())
 
 @app.get("/health")
 def health(): return {"status": "ok"}
