@@ -17,5 +17,5 @@ Source: `AI_Engineer_Intern_Assignment_2 new.docx.pdf` (14 pages). This checklis
 | Database and API endpoints | SQLite / SQLAlchemy; FastAPI routes | `app/database/`, `app/main.py` | `/health`, `/stats`, `/scholarships` returned HTTP 200 | `/docs` | Implemented and smoke-tested |
 | README, requirements, config, sample data, setup | README and requirements; no synthetic sample rows by design | `README.md`, `.env.example` | setup commands | local demo | Partial |
 | Technical note ≤3 pages and working demo guide | concise note and honest demo script | `docs/TECHNICAL_NOTE.md`, `docs/DEMO_SCRIPT.md` | review | screen demonstration | Implemented |
-| Free tools only; deployment preparation | OSS dependencies and Dockerfile | `requirements.txt`, `Dockerfile` | build/run check | local/API run | Implemented; hosting not deployed |
+| Free tools only; deployment preparation | OSS dependencies, Dockerfile and Render Blueprint | `requirements.txt`, `Dockerfile`, `render.yaml` | Render build and live page verified | Public dashboard URL in README | Dashboard deployed; API local only; free filesystem ephemeral |
 | PDF evaluation criteria and automatic-failure audit | final audit includes unmet gates | `docs/FINAL_AUDIT.md` | dataset validation | audit report | Audit completed; data gates remain failed |

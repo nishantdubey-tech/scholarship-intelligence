@@ -33,6 +33,9 @@ The 9 VERIFIED rows consist of six current AICTE schemes, UGC Post Graduate Stud
 | FastAPI endpoints | Implemented | `app/main.py` | `/health`, `/stats`, `/scholarships`: HTTP 200 |
 | Test suite | PASS | 11 tests passed | `.venv/bin/pytest -q` |
 | Python compilation | PASS | `compileall` completed | `python -m compileall` |
-| GitHub repository / hosted deployment | NOT DONE | No Git remote, hosting account, or deployment credentials available | Not applicable |
+| GitHub repository | PASS | Private repo: `nishantdubey-tech/scholarship-intelligence` | Initial commit `5bcff51` |
+| Hosted dashboard | PASS with free-tier limits | https://scholarship-intelligence.onrender.com; healthy and 55-record page verified | Render build successful; live page loaded |
+| Hosted API | NOT DEPLOYED | Render Blueprint deploys Streamlit dashboard only | API available locally |
+| Hosted data persistence | LIMITED | Free Render filesystem is ephemeral; crawler updates do not persist after restart | Render free service configuration |
 
 The dataset gate exits non-zero as required. It passes 20+ records, three source types and two stale/expired examples, and fails the verified-count, high-confidence-count and source-backed-change-count gates. Do not describe this project as submission-ready until those three data gates are met.

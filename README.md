@@ -48,7 +48,7 @@ Run locally with Streamlit as above. API container: `docker build -t scholarship
 
 ### Render hosted demo
 
-`render.yaml` defines a free Streamlit web service. After the repository is pushed, connect the private GitHub repository to Render and create a Blueprint from `render.yaml`. The dashboard uses the included SQLite snapshot. Free Render services have an ephemeral filesystem and can sleep after inactivity, so crawl updates do not persist across restarts; use a paid persistent disk or a managed database for durable operation. The service has not been deployed yet, so no live URL is available.
+`render.yaml` defines a free Streamlit web service. The Blueprint is deployed from this private GitHub repository. The dashboard uses the included SQLite snapshot. Free Render services have an ephemeral filesystem and can sleep after inactivity, so crawl updates do not persist across restarts; use a paid persistent disk or a managed database for durable operation. Live dashboard: https://scholarship-intelligence.onrender.com. The FastAPI API remains available locally only; this Blueprint deploys the dashboard service.
 
 ## Limitations and responsible crawling
 
