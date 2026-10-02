@@ -42,7 +42,7 @@ The validator exits non-zero while numeric data gates fail. The simulator create
 
 ## Deployment
 
-The private GitHub repository is [nishantdubey-tech/scholarship-intelligence](https://github.com/nishantdubey-tech/scholarship-intelligence). The Streamlit demo is [scholarship-intelligence.onrender.com](https://scholarship-intelligence.onrender.com). `render.yaml` defines both the dashboard and a FastAPI service; if the Blueprint has not yet synchronized after a code update, sync it in Render to create the API service. The API has a generated `CRAWL_API_TOKEN` in the Blueprint. The included SQLite snapshot is bundled into each service, so their databases are separate. Render's free filesystem is ephemeral and services can sleep; crawl changes are not durable across restarts.
+The private GitHub repository is [nishantdubey-tech/scholarship-intelligence](https://github.com/nishantdubey-tech/scholarship-intelligence). The Streamlit demo is [scholarship-intelligence.onrender.com](https://scholarship-intelligence.onrender.com); the FastAPI service is [scholarship-intelligence-api.onrender.com](https://scholarship-intelligence-api.onrender.com), with interactive docs at `/docs`. Both services were deployed from commit `52b8eb1`. The API has a generated `CRAWL_API_TOKEN` in the Blueprint. The included SQLite snapshot is bundled into each service, so their databases are separate. Render's free filesystem is ephemeral and services can sleep; crawl changes are not durable across restarts.
 
 ## Safeguards and limits
 

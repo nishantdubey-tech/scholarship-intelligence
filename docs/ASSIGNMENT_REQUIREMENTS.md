@@ -19,7 +19,7 @@ Source: `AI_Engineer_Intern_Assignment_2 new.docx.pdf` (14 pages), interpreted a
 | API endpoints and statistics | Search/filter/pagination, record detail, evidence, history, snapshots, stats, crawl runs and token-protectable crawl | `pytest -q`: 14 passed | Implemented |
 | README, dependencies, configuration and data | Setup guide, requirements, `.env.example`, bundled authentic crawl snapshot | Repository review | Implemented |
 | Technical note ≤3 pages and demo guide | `docs/TECHNICAL_NOTE.md`, `docs/DEMO_SCRIPT.md` | Document review | Implemented |
-| Free deployment | GitHub private repository and hosted Render dashboard; Blueprint also defines API | Hosted dashboard previously verified; API Blueprint needs sync/verification | Dashboard deployed; API deployment pending sync |
+| Free deployment | GitHub private repository, Render dashboard and FastAPI service | Dashboard and API health/stats/list/docs routes returned HTTP 200 | PASS; both deployed from `52b8eb1` |
 | Tests and syntax validation | Unit/API regression suite and Python compile check | `pytest -q`: 14 passed; `PYTHONPYCACHEPREFIX=/tmp/si-pycache .venv/bin/python -m compileall -q app dashboard scripts tests` | PASS |
 
 ## Submission note

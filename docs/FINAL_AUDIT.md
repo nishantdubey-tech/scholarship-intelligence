@@ -30,7 +30,7 @@ The 9 verified rows are six current AICTE schemes, UGC Post Graduate Studies, Is
 | Syntax compilation | `PYTHONPYCACHEPREFIX=/tmp/si-pycache .venv/bin/python -m compileall -q app dashboard scripts tests` | PASS |
 | GitHub | [Private repository](https://github.com/nishantdubey-tech/scholarship-intelligence) | Existing; updates pushed after review |
 | Hosted dashboard | [scholarship-intelligence.onrender.com](https://scholarship-intelligence.onrender.com) | Existing Render free service |
-| Hosted API | Added as second service in `render.yaml` with generated crawl token | Blueprint sync/deployment must be confirmed in Render |
+| Hosted API | [scholarship-intelligence-api.onrender.com](https://scholarship-intelligence-api.onrender.com); generated crawl token protects crawl trigger | `/health`, `/stats`, `/scholarships`, `/docs`: HTTP 200; deployed from `52b8eb1` |
 | Persistence | Bundled SQLite on free service | Ephemeral; dashboard/API each hold independent snapshots |
 
 This submission is not a pass on every assignment acceptance criterion. The validator should remain non-zero until primary-source evidence supports the missing verified records, confidence threshold, and genuine changed source fields. The two demonstration events exist to make change-history behavior reviewable; they cannot satisfy a genuine-change requirement if the evaluator requires observed changes.
